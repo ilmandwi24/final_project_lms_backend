@@ -1,6 +1,9 @@
 const Fs = require('fs');
 const Boom = require('boom');
 const Moment = require('moment');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const bcrypt = require('bcrypt');
+
 const { isEmpty } = require('lodash');
 
 const Pino = require('pino')({
@@ -137,4 +140,22 @@ const readFromFile = (file, raw = false) =>
     });
   });
 
-module.exports = { log, logRequest, unifyResponse, errorResponse, preHandler, readFromFile };
+  const hashPassword = async (password) => {
+    try {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      return hashedPassword;
+    } catch (error) {
+      throw new Error('Error hashing password');
+    }
+  }
+  
+  const comparePassword = async (plainPassword, hashedPassword) => {
+    try {
+        
+        const match = await bcrypt  .compare(plainPassword, hashedPassword);
+        return match;
+    } catch (error) {
+        throw new Error('Error comparing passwords');
+    }
+  }
+module.exports = { log, logRequest, unifyResponse, errorResponse, preHandler, readFromFile, hashPassword, comparePassword };
