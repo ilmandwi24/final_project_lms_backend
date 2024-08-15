@@ -1,6 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const Boom = require('boom');
+// eslint-disable-next-line import/no-extraneous-dependencies
+const cors = require('cors');
+
 
 const CommonHelper = require('./server/helpers/CommonHelper');
 
@@ -8,19 +11,25 @@ const app = express();
 const port = process.env.PORT || 8080;
 
 // Import Route
-const sample = require('./server/api/sample');
+const user = require('./server/api/user');
+const course = require('./server/api/course');
+const lesson = require('./server/api/lesson');
+const payment = require('./server/api/payment');
+const purchase = require('./server/api/purchase');
+
 
 // Middleware
 dotenv.config();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
 
 app.use((req, res, next) => {
   const oldSend = res.send;
   res.send = async (data) => {
     res.send = oldSend; // set function back to avoid the 'double-send'
     const response = CommonHelper.unifyResponse(req, res, data);
-
+    
     // Log Transaction
     const logData = CommonHelper.logRequest(req, response);
 
@@ -32,7 +41,11 @@ app.use((req, res, next) => {
 });
 
 // Route middlewares
-app.use('/api/sample', sample);
+app.use('/api', user);
+app.use('/api', course);
+app.use('/api', lesson);
+// app.use('/api', payment);
+// app.use('/api', purchase );
 
 app.get('/sys/ping', (req, res) => {
   req.startTime = process.hrtime();

@@ -35,9 +35,9 @@ const executeQuery = async (query, values = []) => {
   }
 };
 
-const addLessonToCourse = async (courseId, title, content) => {
-    const query = `INSERT INTO ${lessonTable} (course, title, content) VALUES (?, ?, ?)`;
-    const values = [courseId, title, content];
+const addLessonToCourse = async (courseId, name, content) => {
+    const query = `INSERT INTO ${lessonTable} (course, name, content) VALUES (?, ?, ?)`;
+    const values = [courseId, name, content];
     await executeQuery(query, values);
 };
 
@@ -49,10 +49,11 @@ const getAllLessonByIdCourse = async (courseId) => {
     return result;
 };
 
-const getLessonById = async (id) => {
-    const query = `SELECT * FROM ${lessonTable} WHERE id = ?`;
-    const values = [id];
+const getLessonById = async (courseId, lessonId) => {
+    const query = `SELECT * FROM ${lessonTable} WHERE id = ? AND course = ?`;
+    const values = [Number(lessonId), Number(courseId)];
     const result = await executeQuery(query, values);
+    console.log(result)
     return result;
 }
 
@@ -60,4 +61,4 @@ module.exports = {
     getAllLessonByIdCourse,
     getLessonById,
     addLessonToCourse
-};
+};  

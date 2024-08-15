@@ -27,6 +27,7 @@ const executeQuery = async (query, values = []) => {
     if (connection) connection.release();
     return result;
   } catch (error) {
+   
     CommonHelper.log(['Database', 'Operation', 'ERROR'], {
       message: `${error}`
     });
@@ -49,17 +50,21 @@ const getAllCourseByIntructor = async (instructorId) => {
     return result;
 };
 
-const addCourse = async (name,description,instructorId) => {
-    const query = `INSERT INTO ${courseTable} (name, description, instructor_id) VALUES (?, ?, ?, ?, ?)`;
-    const values = [name,description,instructorId];
+const addCourse = async (name,description,instructorId, price) => {
+    const query = `INSERT INTO ${courseTable} (name, description, instructor_id, price) VALUES (?, ?, ?, ?)`;
+    
+    const values = [name,description,instructorId,price];
     await executeQuery(query, values);
 
 };
 
-const deleteCourse = async (id) => {
-    const query = `DELETE FROM ${courseTable} WHERE id = ?`;
-    const values = [id];
-    await executeQuery(query, values);
+const deleteCourse = async (id, instructorId) => {
+
+    const query = `DELETE FROM ${courseTable} WHERE id = ? AND instructor_id = ?`;
+    const values = [Number(id), Number(instructorId)];
+    // console.log(values)
+    const result = await executeQuery(query, values);
+    return result?.affectedRows > 0;
   };
 
   module.exports = {

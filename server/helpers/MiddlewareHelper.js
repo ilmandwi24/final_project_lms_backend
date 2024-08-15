@@ -5,6 +5,7 @@ const CommonHelper = require('./CommonHelper');
 
 const verifyToken = (req,res,next)=>{
     try {
+        console.log(req.headers)
         const tokenHeader = req.headers.authorization;
         if(!tokenHeader) {
             return res.status(401).send(Boom.unauthorized());

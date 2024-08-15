@@ -36,9 +36,9 @@ const executeQuery = async (query, values = []) => {
 };
 
 
-const addUser = async (email,name,password) => {
-  const query = `INSERT INTO ${userTable} (email, name, password) VALUES (?, ?, ?)`;
-  const values = [email, name, password];
+const addUser = async (email,name,password=null,registerType="web") => {
+  const query = `INSERT INTO ${userTable} (email, name, password, register_type) VALUES (?, ?, ?,?)`;
+  const values = [email, name, password,registerType];
   await executeQuery(query, values);
 };
 
