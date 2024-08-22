@@ -5,6 +5,7 @@ const jwt = require("jsonwebtoken");
 const CommonHelper = require('./CommonHelper');
 
 const user = require('../services/User');
+const cart = require('../services/Cart');
 
 const addUser = async (req) => {
     try {
@@ -16,7 +17,9 @@ const addUser = async (req) => {
         }
         // Check password
         const passwordHash = await CommonHelper.hashPassword(req.body.password);
-        await user.addUser(req.body.email, req.body.name,passwordHash);
+        const dataHasil = await user.addUser(req.body.email, req.body.name,passwordHash);
+        // console.log(dataHasil.insertId,"id");
+        await cart.createCart(dataHasil.insertId);
         return "registration successful";
     } catch (error) {
         CommonHelper.log(['User Helper', 'addUser', 'ERROR'], { message: `${error}` });
@@ -38,12 +41,12 @@ const loginUser = async (req,res) => {
 
     
         }
-        const token = jwt.sign(
+        const token = jwt.sign( 
             {
                 email: getEmailAction[0].email,
             },
             "july24",
-            { expiresIn: "1h" });
+            { expiresIn: "24h" });
         delete getEmailAction[0].password;
         // Object.assign(getEmailAction[0], {token});
         getEmailAction[0].token = token;

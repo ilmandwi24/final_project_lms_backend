@@ -12,6 +12,7 @@ const connectionPool = MySQL.createPool({
 });
 
 const courseTable = process.env.COURSE_TABLE || 'courses';
+const userTable = process.env.USER_TABLE || 'users';
 
 const executeQuery = async (query, values = []) => {
   let connection = null;
@@ -37,7 +38,7 @@ const executeQuery = async (query, values = []) => {
 };
 
 const getAllCourse = async () => {
-    const query = `SELECT * FROM ${courseTable}`;
+    const query = `SELECT *, ${userTable}.name as instructor_name, ${courseTable}.name as name FROM ${courseTable} INNER JOIN ${userTable} ON ${courseTable}.instructor_id = ${userTable}.id ORDER BY ${courseTable}.id DESC`;
     const values = [];
     const result = await executeQuery(query, values);
     return result;
@@ -58,6 +59,13 @@ const addCourse = async (name,description,instructorId, price) => {
 
 };
 
+const editCourse = async (id, instructorId, name, description,price) => {
+  // console.log(lessonId, courseId, name, content)
+  const query = `UPDATE ${courseTable} SET name = ?, description = ?, price = ? WHERE id = ? AND instructor_id = ?`;
+  const result = await executeQuery(query, [name, description, price, Number(id), Number(instructorId)]);
+  return result?.affectedRows > 0;
+};
+
 const deleteCourse = async (id, instructorId) => {
 
     const query = `DELETE FROM ${courseTable} WHERE id = ? AND instructor_id = ?`;
@@ -73,7 +81,8 @@ const deleteCourse = async (id, instructorId) => {
     getAllCourse,
     getAllCourseByIntructor,
     addCourse,
-    deleteCourse
+    deleteCourse,
+    editCourse
     // editPhonebook,
     // deletePhonebook
 };

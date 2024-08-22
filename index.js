@@ -16,6 +16,9 @@ const course = require('./server/api/course');
 const lesson = require('./server/api/lesson');
 const payment = require('./server/api/payment');
 const purchase = require('./server/api/purchase');
+const cart = require('./server/api/cart');
+const midtrans = require('./server/api/midtrans');
+const { testMidtrans } = require('./server/helpers/MidtransHelper');
 
 
 // Middleware
@@ -44,8 +47,12 @@ app.use((req, res, next) => {
 app.use('/api', user);
 app.use('/api', course);
 app.use('/api', lesson);
+app.use('/api', cart);
+app.use('/api', midtrans);
 // app.use('/api', payment);
 // app.use('/api', purchase );
+
+app.get('/testmidtrans', testMidtrans);
 
 app.get('/sys/ping', (req, res) => {
   req.startTime = process.hrtime();

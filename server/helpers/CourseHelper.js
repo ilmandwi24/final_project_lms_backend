@@ -15,7 +15,7 @@ const addCourse = async (req) => {
     }
 }
 
-const getAllCourse = async () => {
+const getAllCourse = async (req) => {
     try {
         //   const dataFromRedis = await Redis.getKey('laptop');
         //   if (dataFromRedis) {
@@ -51,10 +51,13 @@ const getAllCourse = async () => {
         if (data.length === 0) {
             return Boom.notFound('Course not found');
         }
+        let limit = parseInt(req.query.limit, 10) || data.length;
+        limit = Math.max(0, Math.min(limit, data.length)); // Ensure limit is within valid range
+
         const dataResult = {
-            count: data.length,
+            count: limit,
             // listId: ids,
-            list: data
+            list: data.slice(0, limit)
         }
         //   await Redis.setWithExpire('laptop', JSON.stringify(dataResult), 86400);
 
@@ -115,13 +118,27 @@ const getAllCourseByInstructor = async (req) => {
     }
 }
 
+const editCourse = async (req) => {
+    try {
+        const editAction = await course.editCourse(req.params.id, req.params.instructorId, req.body.name, req.body.description, req.body.price);
+        // name, description,price
+        if (!editAction) {
+            return Boom.notFound(`The lesson is not found `);
+        }
+        return `Edited successfully`;
+    } catch (error) {
+        CommonHelper.log(['Lesson Helper', 'editLesson', 'ERROR'], { message: `${error}` });
+        throw CommonHelper.errorResponse(error);
+    }
+};
+
 
 const deleteCourse = async (req) => {
     try {
         const deleteAction = await course.deleteCourse(req.params.id, req.params.instructorId);
         // console.log(deleteAction)
         if (!deleteAction) {
-            return Boom.notFound(`Course with id ${req.params.id} not found `);
+            return Boom.notFound(`The course is not found `);
         }
         return `Delete id ${req.params.id} successfully`;
 
@@ -135,6 +152,7 @@ module.exports = {
     getAllCourse,
     getAllCourseByInstructor,
     addCourse,
-    deleteCourse
+    deleteCourse,
+    editCourse
 };
 

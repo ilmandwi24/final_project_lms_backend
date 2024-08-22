@@ -21,7 +21,25 @@ const addCourse = async (req, res) => {
         });
         return res.send(CommonHelper.errorResponse(error));
     }
-}     
+}  
+
+const editCourse = async (req, res) => {
+    try {
+        // check validation input
+        ValidationHelper.coursesValidation(req.body);
+        // get data from json
+        const data = await CourseHelper.editCourse(req);
+        // return response success
+        return res.send(data);
+    } catch (error) {
+        // return response error
+        CommonHelper.log(['Lesson', 'Edit Lesson', 'ERROR'], {
+            message: `${error}`,
+            transaction_id: req.headers.transaction_id
+        });
+        return res.send(CommonHelper.errorResponse(error));
+    }
+}
 
 const deleteCourse = async (req, res) => {
     try {
@@ -44,7 +62,7 @@ const getAllCourse = async (req, res) => {
     try {
         // check validation input  
         // get data from json
-        const data = await CourseHelper.getAllCourse();
+        const data = await CourseHelper.getAllCourse(req);
         // return response success
         return res.send(data); 
     } catch (error) {
@@ -79,8 +97,11 @@ const getAllCourseByInstructor = async (req, res) => {
 
 
 router.post('/courses/add', CommonHelper.preHandler, MiddlewareHelper.verifyToken, addCourse);
-router.delete('/courses/:id/instructors/:instructorId', CommonHelper.preHandler, MiddlewareHelper.verifyToken, deleteCourse);
 router.get('/courses', CommonHelper.preHandler, getAllCourse);
 router.get('/courses/instructors/:id',  CommonHelper.preHandler, MiddlewareHelper.verifyToken, getAllCourseByInstructor);
+router.put('/courses/:id/instructors/:instructorId',  CommonHelper.preHandler, MiddlewareHelper.verifyToken, editCourse);
+router.delete('/courses/:id/instructors/:instructorId', CommonHelper.preHandler, MiddlewareHelper.verifyToken, deleteCourse);
+// req.params.id, req.params.instructorId, req.body.name, req.body.description, req.body.price
+
 module.exports = router;
 

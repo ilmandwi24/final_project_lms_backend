@@ -66,7 +66,7 @@ const getAllLessonByIdCourse = async (req) => {
 
 const getLessonById = async (req) => {
     try {
-        
+
         const data = await lesson.getLessonById(req.params.courseId, req.params.lessonId);
         //   const dataId = await LaptopDb.getListIdLaptop();
         //   const ids = dataId.map(item => item.id);
@@ -88,9 +88,41 @@ const getLessonById = async (req) => {
     }
 }
 
+const editLesson = async (req) => {
+    try {
+        const editAction = await lesson.editLesson(req.params.lessonId, req.params.courseId, req.body.name, req.body.content);
+        if (!editAction) {
+            return Boom.notFound(`The lesson is not found `);
+        }
+        return `Edited successfully`;
+    } catch (error) {
+        CommonHelper.log(['Lesson Helper', 'editLesson', 'ERROR'], { message: `${error}` });
+        throw CommonHelper.errorResponse(error);
+    }
+};
+
+const deleteLesson = async (req) => {
+    try {
+        // console.log(req.params)
+        const deleteAction = await lesson.deleteLesson(req.params.courseId, req.params.lessonId);
+        console.log(deleteAction)
+        if (!deleteAction) {
+            return Boom.notFound(`Course with id ${req.params.lessonId} not found `);
+        }
+        return `Delete id ${req.params.lessonId} successfully`;
+    } catch (error) {
+        CommonHelper.log(['Lesson Helper', 'deleteLesson', 'ERROR'], { message: `${error}` });
+        throw CommonHelper.errorResponse(error);
+    }
+}
+
+
+``
 
 module.exports = {
     getAllLessonByIdCourse,
     getLessonById,
-    addLessonToCourse
+    addLessonToCourse,
+    editLesson,
+    deleteLesson
 };

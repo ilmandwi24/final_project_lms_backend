@@ -57,8 +57,24 @@ const getLessonById = async (courseId, lessonId) => {
     return result;
 }
 
+const editLesson = async (lessonId, courseId, name, content) => {
+  console.log(lessonId, courseId, name, content)
+  const query = `UPDATE ${lessonTable} SET name = ?, content = ? WHERE id = ? AND course = ?`;
+  const result = await executeQuery(query, [name, content, Number(lessonId), Number(courseId)]);
+  return result?.affectedRows > 0;
+};
+const deleteLesson = async (courseId, lessonsId) => {
+  console.log(courseId, lessonsId)
+    const query = `DELETE FROM ${lessonTable} WHERE id = ? AND course = ?`;
+    const values = [Number(lessonsId), Number(courseId)];
+    const result = await executeQuery(query, values);
+    return result.affectedRows > 0;
+}
+
 module.exports = {
     getAllLessonByIdCourse,
     getLessonById,
-    addLessonToCourse
+    addLessonToCourse,
+    editLesson,
+    deleteLesson
 };  
