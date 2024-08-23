@@ -38,6 +38,23 @@ const getCountCart = async (req, res) => {
     }
 }    
 
+const addCourseToCartItems = async (req, res) => {
+    try {
+        // check validation input
+        // get data from json
+        const data = await CartHelper.addCourseToCartItems(req);
+        // return response success
+        return res.send(data);
+    } catch (error) {
+        // return response error
+        CommonHelper.log(['Cart', 'Add Course To Cart', 'ERROR'], {
+            message: `${error}`,
+            transaction_id: req.headers.transaction_id
+        });
+        return res.send(CommonHelper.errorResponse(error));
+    }
+}   
+
 const deleteCartItem = async (req, res) => {
     try {
         // check validation input
@@ -57,5 +74,6 @@ const deleteCartItem = async (req, res) => {
 router.get('/carts/users/:userId',  CommonHelper.preHandler, MiddlewareHelper.verifyToken, getCart);
 router.get('/carts/users/:userId/count',  CommonHelper.preHandler, MiddlewareHelper.verifyToken, getCountCart);
 router.delete('/carts/:cartId/courses/:courseId',  CommonHelper.preHandler, MiddlewareHelper.verifyToken, deleteCartItem);
+router.post('/carts/cartitems/',  CommonHelper.preHandler, MiddlewareHelper.verifyToken, addCourseToCartItems);
 
 module.exports = router;

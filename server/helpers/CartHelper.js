@@ -67,6 +67,22 @@ const getCountCart = async (req) => {
     }
 }
 
+const addCourseToCartItems = async (req) => {
+    try {
+        const checkCourse = await cart.getCourseInCart(req.body.cartId, req.body.courseId);
+        // console.log(checkCourse,"checkCourse");
+        if (checkCourse.length !== 0) {
+            return Boom.conflict('Course already in cart');
+        }
+        // console.log(req.body)
+        await cart.addCourseToCartItems(req.body.cartId, req.body.courseId);   
+    
+        return "add success";
+    } catch (error) {
+        CommonHelper.log(['Cart Helper', 'addCourseToCartItems', 'ERROR'], { message: `${error}` });
+        throw CommonHelper.errorResponse(error);
+    }
+}
 const deleteCartItem = async (req) => {
     try {
         const data = await cart.deleteCartItem(req.params.cartId, req.params.courseId);
@@ -83,5 +99,6 @@ const deleteCartItem = async (req) => {
 module.exports = {
     getCart,
     getCountCart,
-    deleteCartItem
+    deleteCartItem,
+    addCourseToCartItems
 }

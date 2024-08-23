@@ -38,7 +38,7 @@ const executeQuery = async (query, values = []) => {
 };
 
 const getAllCourse = async () => {
-    const query = `SELECT *, ${userTable}.name as instructor_name, ${courseTable}.name as name FROM ${courseTable} INNER JOIN ${userTable} ON ${courseTable}.instructor_id = ${userTable}.id ORDER BY ${courseTable}.id DESC`;
+    const query = `SELECT ${courseTable}.*, ${userTable}.name as instructor_name, ${courseTable}.name as name FROM ${courseTable} INNER JOIN ${userTable} ON ${courseTable}.instructor_id = ${userTable}.id ORDER BY ${courseTable}.id DESC`;
     const values = [];
     const result = await executeQuery(query, values);
     return result;
@@ -55,6 +55,7 @@ const addCourse = async (name,description,instructorId, price) => {
     const query = `INSERT INTO ${courseTable} (name, description, instructor_id, price) VALUES (?, ?, ?, ?)`;
     
     const values = [name,description,instructorId,price];
+    console.log(values);
     await executeQuery(query, values);
 
 };

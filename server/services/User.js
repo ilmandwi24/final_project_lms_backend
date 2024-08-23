@@ -12,6 +12,7 @@ const connectionPool = MySQL.createPool({
 });
 
 const userTable = process.env.USER_TABLE || 'users';
+const cartTable = process.env.USER_TABLE || 'carts';
 
 const executeQuery = async (query, values = []) => {
   let connection = null;
@@ -44,7 +45,7 @@ const addUser = async (email,name,password=null,registerType="web") => {
 };
 
 const getEmailUser = async(email)=>{
-  const query = `SELECT * FROM ${userTable} WHERE email = ?`;
+  const query = `SELECT ${userTable}.*, ${cartTable}.id as cart_id FROM ${userTable} INNER JOIN ${cartTable} ON ${userTable}.id = ${cartTable}.user_id WHERE email = ? `;
   const values = [email];
   const result = await executeQuery(query, values);
   return result;

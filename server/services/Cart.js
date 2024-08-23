@@ -57,6 +57,20 @@ const getCountCart = async (userId) => {
   return result;
 };
 
+const getCourseInCart = async (cartId, courseId) => {
+  // console.log(cartId);
+  const query = `SELECT * FROM ${cartItems} WHERE cart_id = ? AND course_id = ?`;
+  const values = [cartId, courseId];
+  const result = await executeQuery(query, values);
+  return result;
+}
+
+const addCourseToCartItems = async (cartId, courseId) => {
+  console.log(cartId,courseId)
+  const query = `INSERT INTO ${cartItems} (cart_id, course_id) VALUES (?, ?)`;
+  const values = [cartId, courseId];
+  await executeQuery(query, values);
+}
 const deleteCartItem = async (cartId, courseId) => {
   const query = `DELETE FROM ${cartItems} WHERE cart_id = ? AND course_id = ?`;
   const values = [cartId, courseId];
@@ -78,6 +92,8 @@ module.exports = {
   createCart,
   getCart,
   getCountCart,
-  deleteCartItem
+  deleteCartItem,
+  addCourseToCartItems,
+  getCourseInCart
 
 };

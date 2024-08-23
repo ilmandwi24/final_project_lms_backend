@@ -46,7 +46,8 @@ const getToken = async (req) => {
     const parameter = {
         "transaction_details": {
             // "order_id": req.body.cartId,
-            "order_id": (Math.random() + 1).toString(36).substring(7),
+            // "order_id": (Math.random() + 1).toString(36).substring(7),
+            "order_id": "hijk",
             "gross_amount": req.body.price,
         },
         "credit_card":{

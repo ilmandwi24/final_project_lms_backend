@@ -1,0 +1,12 @@
+{
+  "locale": "\"en\"",
+  "theme": "\"light\"",
+  "user": "{\"id\":23,\"email\":\"user@gmail.com\",\"name\":\"user\",\"token\":\"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAZ21haWwuY29tIiwiaWF0IjoxNzI0Mzg1MDAxLCJleHAiOjE3MjQ0NzE0MDF9.6tPdpGGrb9X18q9CbeAjLBdCDVM8IvDX2H2TpjbpLQA\",\"cart_id\":6}",
+  "coursesByInstructor": "[]",
+  "lessonsByCourse": "[]",
+  "coursesHome": "[{\"id\":49,\"name\":\"How to become Milionare\",\"description\":\"Descript\",\"created_date\":\"2024-08-23T03:48:56.000Z\",\"updated_at\":\"2024-08-23T03:48:56.000Z\",\"instructor_id\":25,\"price\":4000000,\"instructor_name\":\"user3\"},{\"id\":48,\"name\":\"Kotlin Android\",\"description\":\"Description\",\"created_date\":\"2024-08-23T03:47:55.000Z\",\"updated_at\":\"2024-08-23T03:47:55.000Z\",\"instructor_id\":24,\"price\":4500000,\"instructor_name\":\"user2\"},{\"id\":47,\"name\":\"Javascript From Zero To Hero\",\"description\":\"Description\",\"created_date\":\"2024-08-23T03:47:22.000Z\",\"updated_at\":\"2024-08-23T03:47:22.000Z\",\"instructor_id\":24,\"price\":550000,\"instructor_name\":\"user2\"}]",
+  "jumlahCartItem": "0",
+  "cartItems": "[]",
+  "token": "\"\"",
+  "_persist": "{\"version\":-1,\"rehydrated\":true}"
+}
